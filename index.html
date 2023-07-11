@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Tracker - My Books</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">My Books</a>
+                </li>
+                <li class="nav-item">
+                    <a href="book-search.html" class="nav-link">Search Books</a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+    <div class="container">
+        <div class="card-type-select-container">
+            <button type="button" onclick="changeListDisplayType(0)" id="card-type-list-button" class="display-type-button btn btn-secondary"><i class="fa-solid fa-bars"></i></i></button>
+            <button type="button" onclick="changeListDisplayType(1)" id="card-type-details-button" class="display-type-button btn btn-secondary"><i class="fa-solid fa-table-list"></i></button>
+            <button type="button" onclick="changeListDisplayType(2)" id="card-type-grid-button" class="display-type-button btn btn-secondary"><i class="fa-solid fa-border-all"></i></i></button>
+        </div>
+        <div class="book-results">
+            <div class="book-list-item">
+                <div class="list-item-col">
+                    <div class="book-title">Old Man's War</div>
+                    <div class="book-author">John Scalzi</div>
+                </div>
+                <div class="list-item-col">
+                    <div class="book-series">Old Man's War</div>
+                </div>
+                <div class="list-item-col">
+                    <div class="list-item-genre-container">
+                        <div class="genre-item">
+                            <span>Drama</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="list-item-col">
+                    <div class="list-item-row">
+                        <i class="fa-sharp fa-solid fa-book-open" style="font-size: 0.8rem;"></i>
+                        <span id="edit-modal-book-pagecount">327</span>
+                    </div>
+                </div>
+                <div class="list-item-col">
+                    <div class="list-item-row" id="view-rating-container">
+                        <span><i class="fa-regular fa-star" id="rating-star-1"></i></span>
+                        <span><i class="fa-regular fa-star" id="rating-star-2"></i></span>
+                        <span><i class="fa-regular fa-star" id="rating-star-3"></i></span>
+                        <span><i class="fa-regular fa-star" id="rating-star-4"></i></span>
+                        <span><i class="fa-regular fa-star" id="rating-star-5"></i></span>
+                    </div>
+                </div>
+                <div class="list-item-col">
+                    <div class="list-item-row">
+                        <i class="fa-solid fa-check"></i>
+                        <span>10-02-22</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- View/Edit Book Modal -->
+    <div class="modal fade" id="edit-book-modal" tabindex="-1" role="dialog" aria-labelledby="editBookModalLabel" aria-hidden="true" >
+        <div class="modal-dialog modal-lg" role="document" >
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" id="edit-confirm-close" class="close btn btn-danger" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" style="font-size: 1.3rem;">X</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="modal-body-left">
+                        <img id="edit-modal-image" src="">
+                        <div class="rating-container" id="edit-rating-container">
+                            <input type="range" min="0" max="5" value="5" step="0.5" class="slider" id="rating-slider" oninput="ratingChanged()">
+                            <p id="rating-slider-value">5</p>
+                        </div>
+                        <div id="rating-container-outer">
+                            
+                        </div>
+                        <div id="completed-book-bg" class="unchecked">
+                            <div>Completed</div>
+                            <input type="checkbox" id="completed-book-checkbox" onclick="completedCheckClicked()">
+                        </div>      
+                    </div>
+                    <div class="modal-body-right">
+                        <p class="book-title" id="edit-modal-book-title">Title</p>
+                        <p class="book-author"id="edit-modal-book-author" >Author</p>
+                        <div class="modal-page-count-container">
+                            <i class="fa-sharp fa-solid fa-book-open" style="font-size: 0.8rem;"></i>
+                            <p id="edit-modal-book-pagecount">327</p>
+                        </div>
+                        <p class="book-description" id="edit-modal-book-description">Description</p>
+                        <hr>
+                        <div class="book-info-row">
+                            
+                            <div class="book-info-row-item">
+                                <p class="book-info-label">Genre(s)</p>
+                                <div class="book-info-column">
+                                    <p class="book-info" id="book-genres">Sci-Fi</p>
+                                    <button type="button" id="add-genre-button" class="btn btn-success add-button"><i class="fa-solid fa-plus plus-icon"></i><span>Genre</span></button>  
+                                </div>
+                            </div>        
+                        </div>
+                        <hr class="column-hr">
+                        <div class="book-info-row">
+                            <div class="book-info-row-item">
+                                <p class="book-info-label">Series Name</p>
+                                <p class="book-info" id="book-series">Name</p>
+                                <input id="book-series-input" placeholder="Enter Series Name" type="text" class="form-control shadow-none">
+                            </div>
+                        </div>
+                        <hr class="column-hr">
+                        <div class="book-info-row">
+                            <p class="book-info-label">Dates Read</p>
+                            <div class="book-info-column">
+                                <ul class="small-list" id="dates-read-list">
+                                    <li class="dates-read-list-item">
+                                        <p>01-05-2017</p>
+                                    </li>
+                                    <li class="dates-read-list-item">
+                                        <p>12-24-2022</p>
+                                    </li>
+                                </ul>
+                                <button type="button" id="add-date-button" class="btn btn-success add-button"><i class="fa-solid fa-plus plus-icon"></i><span>Date</span></button>      
+                            </div>
+                        </div>
+                        <hr class="column-hr">
+                        <div class="book-info-row">
+                            <p class="book-info-label">Notes</p>
+                            <div class="book-info-column">
+                                <ul class="small-list" id="notes-list">
+                                    <li class="notes-list-item">
+                                        <p>Note Number 1</p>
+                                    </li>
+                                    <li class="notes-list-item">
+                                        <p>Note Number 2</p>
+                                    </li>
+                                </ul>   
+                                <button type="button" id="add-note-button" class="btn btn-success add-button"><i class="fa-solid fa-plus plus-icon"></i><span>Note</span></button>         
+                            </div>
+                        </div>
+                        <hr class="column-hr">
+                        <div class="book-info-row space-between">
+                            <div class="book-info-row-item">
+                                <p class="book-info-label">Published By</p>
+                                <p class="book-info" id="publisher-name">Publisher Name</p>
+                            </div>
+                            <div class="book-info-row-item">
+                                <p class="book-info-label">Published</p>
+                                <p class="book-info" id="published-date">05-14-2017</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="edit-confirm-cancel" class="btn btn-danger">Cancel</button>
+                    <button type="button" id="edit-confirm-edit" class="btn btn-primary">Edit</button>
+                    <button type="button" id="edit-confirm-save" class="btn btn-success">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Add Date Picker Modal -->
+    <div class="modal fade" id="add-date-modal" tabindex="-1" role="dialog" aria-labelledby="addDateModalLabel" aria-hidden="true" >
+        <div class="modal-dialog" role="document" >
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="save-book-confirm-message">Choose Date</h5>
+                    <button type="button" id="add-date-close" class="close btn btn-danger" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" style="font-size: 1.3rem;">X</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="date-picker-container">
+                        <input type="date" id="calendar" name="date-calendar">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="add-date-cancel" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" id="add-date-ok" class="btn btn-primary">Add Date</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Add Genre or Note Modal -->
+    <div class="modal fade" id="add-note-genre-modal" tabindex="-1" role="dialog" aria-labelledby="addNoteGenreModalLabel" aria-hidden="true" >
+        <div class="modal-dialog" role="document" >
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="add-note-genre-title">-</h5>
+                    <button type="button" id="add-note-genre-close" class="close btn btn-danger" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" style="font-size: 1.3rem;">X</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!--<input id="add-note-genre-input" type="text" class="form-control shadow-none" placeholder="Enter username..">-->
+                    <div class="choose-genre-outer">
+                        <div class="choose-genre-inner width-30">
+                            <span>Common</span>
+                            <div id="genre-list-common"></div>
+                        </div>
+                        <div class="choose-genre-inner width-30">
+                            <span>Other</span>
+                            <div id="genre-list-other"></div>
+                        </div>
+                        <div class="choose-genre-inner width-30">
+                            <span>User</span>
+                            <div id="genre-list-user"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="add-note-genre-cancel" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" id="add-note-genre-ok" class="btn btn-primary">Add</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
+    <script src="db.js"></script>
+    <script src="script-main.js"></script>
+</body>
+</html>

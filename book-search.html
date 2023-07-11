@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Tracker - Search for a Book</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">My Books</a>
+                </li>
+                <li class="nav-item">
+                    <a href="book-search.html" class="nav-link">Search Books</a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+    <div class="container">
+        <div class="input-group mb-3">
+            <span class="input-group-text" id="inputGroup-sizing-default">Book Title</span>
+            <input id="search-input" type="text" class="form-control shadow-none">
+            <button onclick="searchBook()" type="button" class="btn btn-primary">Search</button>
+        </div>
+        <div>
+            <p id="title"></p>
+            <p id="author"></p>
+            <img src="" alt="" id="thumbnail" />  
+        </div>
+        <div id="search-results">
+            <div class="result-card">
+                <img src="http://books.google.com/books/content?id=iaM7DwAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api">
+                <div class="card-info">
+                    <p class="book-title">Old Man's War</p>
+                    <p class="book-author">John Scalzi</p>
+                </div>
+                <div class="page-count-container">
+                    <i class="fa-sharp fa-solid fa-book-open"></i>
+                    <p>327</p>
+                </div>
+            </div>
+        </div>
+        <!-- Modal -->
+        <div class="modal fade" id="add-book-modal" tabindex="-1" role="dialog" aria-labelledby="addBookModalLabel" aria-hidden="true" >
+            <div class="modal-dialog modal-lg" role="document" >
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="save-book-confirm-message">Add Book?</h5>
+                        <button type="button" id="save-book-confirm-close" class="close btn btn-danger" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true" style="font-size: 1.3rem;">X</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div>
+                            <img id="save-modal-image" src="">
+                        </div>
+                        <div class="modal-body-right">
+                            <p class="book-title" id="save-modal-book-title">Title</p>
+                            <p class="book-author"id="save-modal-book-author" >Author</p>
+                            <div class="modal-page-count-container">
+                                <i class="fa-sharp fa-solid fa-book-open" style="font-size: 0.8rem;"></i>
+                                <p id="save-modal-book-pagecount">327</p>
+                            </div>
+                            <p class="book-description" id="save-modal-book-description">Description</p>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="save-confirm-cancel" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" id="save-confirm-ok" class="btn btn-primary">Add Book</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
+    <script src="db.js"></script>
+    <script src="script-search.js"></script>
+</body>
+</html>
