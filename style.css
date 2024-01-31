@@ -1,5 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Nunito+Sans&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Akshar:wght@300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&display=swap');
+
+:root{
+    --bg-color: #e8e8e8;
+    --nav-color: #1f1f1f;
+    --accent-color: #ecb852;
+}
 
 *{
     padding: 0;
@@ -17,11 +24,11 @@ a{
 }
 
 header{
-    background-color: #6f6f6f;
+    background-color: var(--nav-color);
 }
 
 body{
-    background-color: #212121;
+    background-color: var(--bg-color);
     font-family: 'Nunito Sans', sans-serif;
     color: white;
 }
@@ -29,6 +36,11 @@ body{
 .container{
     padding: 30px;
     height: 100%;
+}
+
+.search-container{
+    max-width: 600px;
+    margin: auto;
 }
 
 #search-results{
@@ -129,11 +141,11 @@ body{
 }
 
 .navbar{
-    min-height: 40px;
+    min-height: 30px;
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 10px 24px;
+    padding-top: 10px;
 }
 
 .nav-menu{
@@ -141,12 +153,16 @@ body{
     justify-content: center;
     align-items: center;
     gap: 100px;
+    margin-bottom: 0;
+    padding-bottom: 8px;
 }
 
 .nav-link{
+    font-family: 'Amatic SC', sans-serif;
+    line-height: 2rem;
     transition: 0.7s ease;
-    font-size: 1.2rem;
-    padding-top: 8px;
+    font-size: 2.4rem;
+    color: var(--accent-color)
 }
 
 .nav-link:hover{
