@@ -2,8 +2,8 @@ let currentBook;
 let selectedListCardType = -1;
 let genreList;
 
-window.onload = (event) => {
-    document.addEventListener('databaseLoaded', (e)=>{
+window.onload = () => {
+    document.addEventListener('databaseLoaded', ()=>{
         console.log("books loaded");
         console.log(myBooks);
         console.log("User preferred Display Index: " + selectedListCardType);
@@ -15,9 +15,9 @@ window.onload = (event) => {
 
 function changeListDisplayType(typeIndex){
     const displayBtns = $('.display-type-button');
-    if (selectedListCardType != typeIndex){
+    if (selectedListCardType !== typeIndex){
         console.log("Changing display type to: " + typeIndex);
-        if (selectedListCardType != -1){
+        if (selectedListCardType !== -1){
             displayBtns[selectedListCardType].classList.remove('btn-selected');
         }
         displayBtns[typeIndex].classList.add('btn-selected');
@@ -80,6 +80,7 @@ function loadBooksAsGridView(){
     });
 }
 
+/*
 function createBookListViewItem(bookInfo){
     const bookResultsDiv = $('.book-results');
 
@@ -143,9 +144,127 @@ function createBookListViewItem(bookInfo){
         viewBookSelection(bookInfo, () => editBookSelection(bookInfo));
     }
 }
+*/
+
+function createBookListViewItem(bookInfo) {
+    const bookResultsDiv = $('.book-results');
+
+    // Change results class to list
+    changeViewClass(bookResultsDiv, 'grid-view', 'list-view');
+
+    // Create a string from the last date read if one exists, otherwise show an empty string ''
+    let dateReadString = '';
+    if (bookInfo.info.datesRead.length > 0){
+        const dateRead = bookInfo.info.datesRead[bookInfo.info.datesRead.length-1].replaceAll('-', '.');
+        const year = dateRead[dateRead.length-2]+dateRead[dateRead.length-1];
+        dateReadString = dateRead.substring(0, 6) + year;
+    }
+
+    const listItem = document.createElement('div');
+    listItem.className += "book-list-item row py-2";
+
+    const itemInner =    `<div class="my-auto book-info-left">\n` +
+                                        `<div class="row">\n` +
+                                            `<div class="col-md-4 my-auto">\n` +
+                                                `<div class="book-title">${bookInfo.info.title}</div>\n` +
+                                            `</div>\n` +
+                                            `<div class="col-md-4 my-auto">\n` +
+                                                `<div class="book-author">${getAuthorsString(bookInfo.info.authors)}</div>\n` +
+                                            `</div>\n` +
+                                            `<div class="col-md-4 my-auto">\n` +
+                                                `<div class="book-series">${bookInfo.info.seriesName !== 'na' ? bookInfo.info.seriesName : ''}</div>\n` +
+                                            `</div>\n` +
+                                        `</div>\n` +
+                                    `</div>\n` +
+                                    `<div class="my-auto book-info-right ms-auto">\n` +
+                                        `<div class="row">\n` +
+                                            `<div class="col-sm-5 m-auto px-2 py-1">\n` +
+                                                `<div class="book-pages">${bookInfo.info.pageCount} pages</div>\n` +
+                                            `</div>\n` +
+                                            `<div class="col-sm-7 my-auto px-2 py-1">\n` +
+                                                `<div class="progress" role="progressbar" aria-label="Book Rating" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">\n` +
+                                                    `<div class="progress-bar w-50">50</div>\n` +
+                                                `</div>\n` +
+                                            `</div>\n` +
+                                        `</div>\n` +
+                                    `</div>\n` +
+                                    `<div class="my-auto book-info-completed">\n` +
+                                        `<div class="row">\n` +
+                                            `<div class="book-date col-8 my-auto pe-2 text-end">\n` +
+                                                `${dateReadString}\n` +
+                                            `</div>\n` +
+                                            `<div class="col-4 my-auto px-0">\n` +
+                                                `<i class="fa-solid fa-circle-check ${bookInfo.info.completed ? '' : 'not-'}completed"></i>\n` +
+                                            `</div>\n` +
+                                        `</div>\n` +
+                                    `</div>`;
+
+    listItem.onclick = function () {
+        viewBookSelection(bookInfo, () => editBookSelection(bookInfo));
+    }
+    listItem.innerHTML = itemInner;
+    bookResultsDiv.append(listItem);
 
 
-function createBookDetailsViewItem(bookInfo){
+    /*
+    // Create outer div row
+    const item = createDivElem(true, 'book-list-item');
+    // Create Title div
+    const titleDiv = createItemColElem(true, true, 'width-30');
+    const title = createDivElem(true, 'book-title');
+    title.innerHTML = bookInfo.info.title;
+    titleDiv.append(title);
+    item.append(titleDiv);
+
+    // Create Author div
+    const authorDiv = createItemColElem(true, true, 'width-20');
+    const author = createDivElem(true, 'book-author');
+    author.innerHTML = getAuthorsString(bookInfo.info.authors);
+    authorDiv.append(author);
+    item.append(authorDiv);
+
+    // Create/Add Book Series' Name. Leave empty if not a series
+    const seriesDiv = createItemColElem(true, true, 'width-20');
+    const series = createDivElem(true, 'book-series');
+    if (bookInfo.info.seriesName != 'na') {
+        series.innerHTML = bookInfo.info.seriesName;
+    }
+    seriesDiv.append(series);
+    item.append(seriesDiv);
+
+    // Create Page Count div
+    const pageCountCol = createItemColElem(true, true, 'width-10');
+    const pageCountRow = createItemRowElem(false, true);
+    pageCountCol.append(pageCountRow);
+    const pageIcon = createIconElem(['fa-sharp', 'fa-solid', 'fa-book-open']);
+    pageCountRow.append(pageIcon);
+    const pageNum = createSpanElem(bookInfo.info.pageCount);
+    pageCountRow.append(pageNum);
+    item.append(pageCountCol);
+
+    // Create Ratings div
+    const ratingCol = createItemColElem(true, true, 'width-10');
+    const ratingRow = createAndSetRatingStars(bookInfo.info.userRating, 'rating-container');
+    ratingCol.append(ratingRow);
+    item.append(ratingCol);
+
+    // Create completed Date div
+    const completedDateCol = document.createElement('div');
+    completedDateCol.classList.add('completed-date-col');
+    completedDateCol.classList.add('width-10');
+    if (bookInfo.info.completed) {
+        const completedDateRow = createCompletedElem(bookInfo.info.datesRead, false);
+        completedDateCol.append(completedDateRow);
+    }
+    item.append(completedDateCol);
+
+    item.onclick = function () {
+        viewBookSelection(bookInfo, () => editBookSelection(bookInfo));
+    }
+     */
+}
+
+function createBookDetailsViewItem(bookInfo) {
     const bookResultsDiv = $('.book-results');
 
     // Change results class to list
@@ -153,7 +272,7 @@ function createBookDetailsViewItem(bookInfo){
 
     // Create outer div row
     const item = createDivElem(true, 'book-list-item');
-    $('.book-results').append(item);
+    bookResultsDiv.append(item);
 
     // Create Book Cover Div
     const coverDiv = createItemColElem(false, true);
@@ -175,13 +294,13 @@ function createBookDetailsViewItem(bookInfo){
 
     // Create/Add Book Series' Name. Leave empty if not a series
     const series = createDivElem(true, 'book-series');
-    if (bookInfo.info.seriesName != 'na'){
+    if (bookInfo.info.seriesName !== 'na') {
         series.innerHTML = bookInfo.info.seriesName;
     }
     tAndA.append(series);
 
     // Create Genre(s) div
-    const genreCol = createItemColElem(true, true,  'width-20');
+    const genreCol = createItemColElem(true, true, 'width-20');
     const genre = createDivElem(true, 'list-item-genre-container');
     genreCol.append(genre);
     item.append(genreCol);
@@ -189,7 +308,7 @@ function createBookDetailsViewItem(bookInfo){
     bookInfo.info.genres.forEach((e) => {
         createGenreElem(e, genre, false);
     })
-    
+
     // Create Page Count div
     const pageCountCol = createItemColElem(true, true, 'width-10');
     const pageCountRow = createItemRowElem(false, true);
@@ -267,7 +386,7 @@ function createBookGridViewItem(bookInfo){
     
     // Create/Add Book Series' Name. Leave empty if not a series
     const series = createDivElem(true, 'book-series');
-    if (bookInfo.info.seriesName != 'na'){
+    if (bookInfo.info.seriesName !== 'na'){
         series.innerHTML = bookInfo.info.seriesName;
     }
     innerDiv.append(series);
@@ -549,7 +668,7 @@ function createNoteElem(noteText){
     innerDiv.append(p);
     // add div to dates-read-list-item div
     item.append(innerDiv);
-    btn.addEventListener('click', (e) => {
+    btn.addEventListener('click', () => {
         console.log("Note Clicked: " + noteText);
         removeNote(item, noteText);
     });
@@ -574,7 +693,7 @@ function createDateElem(dateText){
     innerDiv.append(p);
     // add div to dates-read-list-item div
     item.append(innerDiv);
-    btn.addEventListener('click', (e) => {
+    btn.addEventListener('click', () => {
         console.log("Date Clicked: " + dateText);
         removeDate(item, dateText);
     });
@@ -591,7 +710,7 @@ function createGenreElem(genreID, targetElem, addButton){
     // Create delete button to the right of the text
     if (addButton){
         const btn = createDeleteBtnElem();
-        btn.addEventListener('click', (e) => {
+        btn.addEventListener('click', () => {
             console.log("Genre Removed: " + genreID);
             removeGenre(outerDiv, genreID);
         });
@@ -670,7 +789,7 @@ function fillInEditModalInfo(bookInfo){
     $('#edit-modal-book-pagecount').text(bookInfo.pageCount ? bookInfo.pageCount : '-');
     $('#publisher-name').text(bookInfo.publisher ? bookInfo.publisher : '-');
     $('#published-date').text(bookInfo.publishedDate ? bookInfo.publishedDate : '-')
-    $('#book-series').text(bookInfo.seriesName == 'na' ? '' : bookInfo.seriesName);
+    $('#book-series').text(bookInfo.seriesName === 'na' ? '' : bookInfo.seriesName);
 
     // Hide edit elements
     toggleEditElements(false);
@@ -699,7 +818,7 @@ function saveCurrentBook(bookToSave){
 
     const seriesName = $('#book-series-input').val();
     console.log(seriesName);
-    bookToSave.info.seriesName = seriesName == '' ? 'na' : seriesName;
+    bookToSave.info.seriesName = seriesName === '' ? 'na' : seriesName;
     $('#book-series').text(seriesName);
     
 
@@ -776,7 +895,7 @@ function createAndSetRatingStars(rating, divClass){
         if (rating - (i+1) >= 0){   //Full star
             star.classList.add('fa-solid');
             star.classList.add('fa-star');
-        }else if (rating - (i+1) == -0.5){ // Half star
+        }else if (rating - (i+1) === -0.5){ // Half star
             star.classList.add('fa-regular');
             star.classList.add('fa-star-half-stroke');
         }else{

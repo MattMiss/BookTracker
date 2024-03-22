@@ -1,39 +1,71 @@
-window.onload = (event) => {
-    document.getElementById('search-input').addEventListener('keypress', function(e){
-        if (e.key == 'Enter'){
+const MAX_SEARCH_RESULTS = 10;
+let searchInput;
+let searchResultsDiv;
+
+$(window).on('load', () => {
+    searchInput = $('#search-input');
+    searchResultsDiv = $('#search-results');
+    searchInput.keypress((e) => {
+        if (e.key === 'Enter'){
             searchBook();
         }
-    });
-
-    $('#search-input').val('old mans war');
-    searchBook();
-};
-
+    })
+});
 
 function searchBook(){
-    $('#search-results').empty();
-
-    var search = $('#search-input').val();
+    searchResultsDiv.empty();
 
     $.ajax({
         dataType: 'json',
-        url: 'https://www.googleapis.com/books/v1/volumes?q=' + search,
-        success: handleResponse
+        url: 'https://www.googleapis.com/books/v1/volumes?q=' + searchInput.val(),
+        success: handleSearchResponse
     });
 }
 
-function handleResponse(response){
-    $.each( response.items, function( i, item) {
-        if ( i < 20)
+function handleSearchResponse(response){
+    $.each( response.items, function( i, result) {
+        if ( i < MAX_SEARCH_RESULTS)
         {
-            createBookCard(item);
+            console.log(result);
+            createResultBookItem(result);
         }
     });
 }
 
 
-function createBookCard(item){
-    
+function createResultBookItem(item){
+    let img = `<div class="missing-img d-flex justify-content-center align-items-center text-center"><i class="fa-regular fa-image"></i></div>`;
+    if (item.volumeInfo.imageLinks && item.volumeInfo.imageLinks.thumbnail){
+        img = `<img src="${item.volumeInfo.imageLinks.thumbnail}" class="img-search-result">`;
+    }
+
+    let bookResultItem = document.createElement('div');
+    bookResultItem.className += "search-result-item row py-2";
+
+    const onSaveBook = () => {
+        addBookToSavedList(item, item.volumeInfo.industryIdentifiers);
+    }
+
+    bookResultItem.onclick = () => {
+        confirmBookSelection(item.volumeInfo, onSaveBook);
+    }
+
+    console.log(img);
+
+    bookResultItem.innerHTML =
+        `<div class="col-auto">
+            ${img}
+         </div>
+         <div class="col">
+             <div class="book-title">${item.volumeInfo.title ? item.volumeInfo.title : '-'}</div>
+             <div class="book-author">${item.volumeInfo.authors && item.volumeInfo.authors[0] ? item.volumeInfo.authors[0] : '-'}</div>
+             <div class="book-pages">${item.volumeInfo.pageCount ? item.volumeInfo.pageCount + ' pages': ''}</p>
+             <div class="book-description">${item.volumeInfo.description ? item.volumeInfo.description : ''}</div>
+         </div>`;
+
+    searchResultsDiv.append(bookResultItem);
+
+    /*
     const cardInfo = document.createElement('div');
     cardInfo.classList.add('card-info');
 
@@ -87,6 +119,7 @@ function createBookCard(item){
     }
 
     $('#search-results').append(resultCard);
+    */
 }
 
 function confirmBookSelection(bookInfo, onConfirm){
@@ -96,7 +129,7 @@ function confirmBookSelection(bookInfo, onConfirm){
     var modal = $("#add-book-modal");
     modal.modal("show");
 
-    fillInSaveModalInfo(bookInfo);
+    populateSaveModalInfo(bookInfo);
 
     $("#save-confirm-message").empty().append('Add ' + bookInfo.title + '?');
     $("#save-confirm-ok").unbind().one('click', onConfirm).one('click', fClose);
@@ -135,7 +168,7 @@ function addBookToSavedList(bookInfo, identifiers){
     addSavedBook(db,bookBlueprint, id);
 }
 
-function fillInSaveModalInfo(bookInfo){
+function populateSaveModalInfo(bookInfo){
     if (bookInfo.imageLinks && bookInfo.imageLinks.thumbnail){
         $('#save-modal-image').attr('src', bookInfo.imageLinks.thumbnail);
         console.log( bookInfo.imageLinks.thumbnail);
@@ -144,5 +177,5 @@ function fillInSaveModalInfo(bookInfo){
     $('#save-modal-book-title').text(bookInfo.title ? bookInfo.title : '-');
     $('#save-modal-book-author').text(bookInfo.authors && bookInfo.authors[0] ? bookInfo.authors[0] : '-');
     $('#save-modal-book-description').text(bookInfo.description ? bookInfo.description : '-');
-    $('#save-modal-book-pagecount').text(bookInfo.pageCount ? bookInfo.pageCount : '-');
+    $('#save-modal-book-pages').text(bookInfo.pageCount ? bookInfo.pageCount : '-');
 }

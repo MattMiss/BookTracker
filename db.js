@@ -1,4 +1,5 @@
 const dbOpenedEvent = new Event("databaseLoaded");
+let dbLoaded = false;
 
 let db;
 let dbRequest = indexedDB.open('myDatabase', 1);
@@ -40,6 +41,7 @@ function addSavedBook(db, bookInfo, bookID){
 }
 
 function loadDatabase(){
+    console.log('trying to load database');
     // Start a database transaction and get the book object store
     const tx = db.transaction(['books'], 'readonly');
     const store = tx.objectStore('books');
@@ -52,6 +54,7 @@ function loadDatabase(){
     books.onsuccess = (event) => {
         myBooks = books.result;
         document.dispatchEvent(dbOpenedEvent);
+        dbLoaded = true;
     };
 }
 
@@ -66,6 +69,7 @@ function updateSavedBook(bookToUpdate, bookID, onSave){
         // Update page with new database
         console.log("Updated Database");
         document.dispatchEvent(dbOpenedEvent);
+        onSave();
         console.log("hmm");
     };
     request.onerror = function(e){

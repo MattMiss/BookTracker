@@ -1,0 +1,394 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Akshar:wght@300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&display=swap');
+
+:root{
+    --body-bg-color: #cbcbcb;
+    --item-bg-color: whitesmoke;
+    --nav-color: #1f1f1f;
+    --accent-color: #0670b8;
+    --accent-color-2: #ecb852;
+    --accent-color-3: #9B00CA;
+    --font-color: #3d3d3d;
+    --font-secondary-color: #777;
+    --selected-dark: #035185;
+    --completed: #3acb80;
+    --editing-color: #da4545;
+}
+
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+li{
+
+}
+
+a{
+    text-decoration: none;
+}
+
+header{
+    background-color: var(--nav-color);
+}
+
+body{
+    background-color: var(--body-bg-color);
+    font-family: 'Nunito Sans', sans-serif;
+    color: var(--font-color);
+}
+
+
+/* --------------------- NAVIGATION ------------------------ */
+.navbar, .nav-menu{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    list-style: none;
+}
+
+.navbar{
+    min-height: 30px;
+    font-family: 'Amatic SC', sans-serif;
+    transition: 0.7s ease;
+    font-size: 2.4rem;
+}
+
+.nav-menu{
+    gap: 50px;
+}
+
+.nav-link{
+    color: var(--accent-color-2);
+    width: 200px;
+}
+
+.nav-link:hover{
+    color: var(--accent-color);
+}
+
+
+/* ------------------- DISPLAY BUTTONS ----------------------- */
+.display-type-button:hover{
+    background-color: var(--selected-dark);
+}
+
+.btn-selected{
+    background-color: var(--accent-color);
+}
+
+
+/* --------------------- LIST & GRID VIEWS ------------------- */
+.list-view{
+    flex-direction: column;
+    gap: 10px;
+}
+
+.grid-view{
+    flex-direction: row;
+    justify-content:flex-start;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.book-field{
+    font-size: 0.7rem;
+    font-weight: bold;
+    color: var(--font-secondary-color);
+    text-transform: uppercase;
+}
+
+/* ------------------------ BOOK ITEMS ---------------------- */
+.book-list-item, .book-grid-item{
+    cursor: pointer;
+    background-color: var(--item-bg-color);
+    border-radius: 4px;
+    border:2px solid transparent;
+}
+
+.book-list-item{
+    justify-content: space-between;
+    min-height: 50px;
+    min-width: 360px !important;
+}
+
+.book-grid-item{
+    width: 32%;
+}
+
+.book-list-item:hover, .book-grid-item:hover{
+    border-color: var(--accent-color);
+}
+
+.book-title, .book-author, .book-series, .book-pages, .book-date, .book-rating-label, .book-rating-100{
+    font-weight: bold;
+}
+
+
+.book-title{
+    font-size: 1rem;
+    color: Var(--accent-color);
+    min-height: 24px;
+}
+
+.book-author, .book-date, .book-rating-label{
+    font-size: 0.9rem !important;
+    color: var(--font-secondary-color);
+    min-height: 22px;
+}
+
+.book-series{
+    font-size: 0.8rem;
+    color: var(--accent-color-3);
+    min-height: 20px;
+}
+
+.book-pages{
+    font-size: 0.8rem;
+}
+
+.book-rating-outer{
+    width: 60px;
+}
+
+.book-rating-label{
+    width: 30px !important;
+}
+
+.book-rating-100{
+    font-size: 0.6rem;
+}
+
+.book-info-left{
+    width: 50% !important;
+}
+
+.book-info-right{
+   width: 35% !important;
+}
+
+.book-info-completed{
+    width: 120px;
+}
+
+.book-list-image{
+    height: 75px;
+    width: 50px;
+}
+
+.book-grid-image{
+    height: 150px;
+    width: 100px;
+}
+
+.genre-item-inner{
+    font-weight: normal;
+    border-radius: 4px;
+    font-size: .8rem;
+    border-width: 2px;
+    border-style: solid;
+}
+
+.completed{
+    color: var(--completed);
+    font-size: 1.6rem;
+    visibility: visible;
+}
+
+.not-completed{
+    visibility: hidden;
+}
+
+/* --------------------- MODAL VIEWS ------------------- */
+
+.border-round-4 {
+    border-radius: 4px;
+}
+
+.modal-header, .modal-footer{
+    border: none;
+    min-height: 38px;
+}
+
+.modal-header{
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
+}
+
+.modal-title{
+    display: none;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.field-label{
+    font-size: 0.7rem !important;
+    color: var(--accent-color);
+    font-weight: bold;
+    left: 30px;
+    top: -9px;
+}
+
+.field-label span{
+    background-color: white;
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+.field-text{
+    font-size: 0.8rem;
+    font-weight: bold;
+    border: 1px solid rgba(221, 221, 221, 0.68);
+    border-radius: 2px;
+    padding: 12px 10px 6px 10px;
+
+}
+
+.field-small, .field-medium, .field-large{
+    overflow: auto;
+}
+
+.field-small{
+    height: 40px;
+}
+
+.field-medium{
+    height: 70px;
+}
+
+.field-large{
+    height: 120px;
+}
+
+.dates-read-list{
+
+}
+
+.img-modal{
+    height: 150px;
+}
+
+.hidden{
+    display: none;
+}
+
+#modal-book-progress-input{
+    display: none;
+}
+
+.editing{
+    .field-text{
+        border-color: var(--editing-color);
+    }
+    .modal-title{
+        display: block;
+    }
+    .modal-header{
+        background-color: var(--editing-color);
+        color: white;
+    }
+
+    .btn-close{
+        color: white !important;
+    }
+
+    #modal-book-prog-bar-outer{
+        display: none;
+    }
+    #modal-book-progress-input{
+        display: block;
+    }
+}
+
+
+/* ---------------------- SEARCH RESULTS ----------------------- */
+
+.search-result-item{
+    cursor: pointer;
+    background-color: var(--item-bg-color);
+    border-radius: 4px;
+}
+
+.book-description{
+    font-size: .8rem;
+    max-height: 100px;
+
+    -webkit-box-orient: vertical;
+    display: block;
+    display: -webkit-box;
+    overflow: hidden !important;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 4;
+}
+
+.img-search-result, .missing-img{
+    width: 80px;
+    height: 120px;
+}
+
+.missing-img i{
+    font-size: 4rem;
+}
+
+/* ------------------------ MEDIA QUERIES ---------------------- */
+
+@media screen and (max-width: 992px){
+    .book-grid-item{
+        width: 48%;
+    }
+
+    .book-title{
+        font-size: 0.9rem;
+    }
+
+    .book-author{
+        font-size: 0.8rem;
+    }
+
+    .genre-item-inner{
+        font-size: 0.7rem;
+    }
+
+    .book-info-left{
+        width: 50% !important;
+    }
+
+    .book-info-right{
+        width: 30% !important;
+    }
+
+}
+
+@media screen and (max-width: 768px){
+    #my-book-list{
+        justify-content: space-around !important;
+    }
+
+    .book-grid-item{
+        width: 100%;
+    }
+    .book-info-left{
+        width: 30% !important;
+    }
+    .book-info-right{
+        width: 40% !important;
+    }
+}
+
+
+@media screen and (max-width: 500px){
+    .book-grid-item{
+        width: 100%;
+        min-width: 300px;
+    }
+
+    .book-info-left{
+        width: 32% !important;
+    }
+
+    .book-info-right{
+        width: 34% !important;
+    }
+}

@@ -6,14 +6,14 @@
     <title>Book Tracker - Search for a Book</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <header>
         <nav class="navbar">
             <ul class="nav-menu">
                 <li class="nav-item">
-                    <a href="index.html" class="nav-link">My Books</a>
+                    <a href="index_test.html" class="nav-link ">My Books</a>
                 </li>
                 <li class="nav-item">
                     <a href="book-search.html" class="nav-link">Search Books</a>
@@ -22,7 +22,7 @@
         </nav>
     </header>
     <div class="container">
-        <div class="search-container input-group mb-3">
+        <div class="search-container input-group mb-3 pt-4">
             <span class="input-group-text" id="inputGroup-sizing-default">Book Title</span>
             <input id="search-input" type="text" class="form-control shadow-none">
             <button onclick="searchBook()" type="button" class="btn btn-primary">Search</button>
@@ -32,41 +32,50 @@
             <p id="author"></p>
             <img src="" alt="" id="thumbnail" />  
         </div>
-        <div id="search-results">
-            <div class="result-card">
-                <img src="http://books.google.com/books/content?id=iaM7DwAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api">
-                <div class="card-info">
-                    <p class="book-title">Old Man's War</p>
-                    <p class="book-author">John Scalzi</p>
+        <div class="list-view d-flex" id="search-results">
+            <div class="search-result-item row py-2">
+                <div class="col-auto">
+                    <img class="img-fluid img-search-result" src="http://books.google.com/books/content?id=iaM7DwAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api">
                 </div>
-                <div class="page-count-container">
-                    <i class="fa-sharp fa-solid fa-book-open"></i>
-                    <p>327</p>
+                <div class="col">
+                    <div class="book-title">Old Man's War</div>
+                    <div class="book-author">John Scalzi</div>
+                    <div class="book-pages">327 pages</div>
+                    <div class="book-description">Perfect for an entry-level sci-fi reader and the ideal addition to a veteran fan’s collection, John Scalzi's Old Man’s War will take audiences on a heart-stopping adventure into the far corners of the universe. John Perry did two things on his 75th birthday. First he visited his wife's grave. Then he joined the army. The good news is that humanity finally made it into interstellar space. The bad news is that planets fit to live on are scarce-and aliens willing to fight for them are common. The universe, it turns out, is a hostile place. So: we fight. To defend Earth (a target for our new enemies, should we let them get close enough) and to stake our own claim to planetary real estate. Far from Earth, the war has gone on for decades: brutal, bloody, unyielding. Earth</div>
                 </div>
             </div>
         </div>
         <!-- Modal -->
         <div class="modal fade" id="add-book-modal" tabindex="-1" role="dialog" aria-labelledby="addBookModalLabel" aria-hidden="true" >
-            <div class="modal-dialog modal-lg" role="document" >
+            <div class="modal-dialog modal-md modal-dialog-centered" role="document" >
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="save-book-confirm-message">Add Book?</h5>
-                        <button type="button" id="save-book-confirm-close" class="close btn btn-danger" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true" style="font-size: 1.3rem;">X</span>
-                        </button>
+                        <h5 class="modal-title" id="save-book-confirm-message">Add book to my list?</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <div>
-                            <img id="save-modal-image" src="">
+                        <div class="pb-3 text-center">
+                            <img class="m-auto img-fluid img-modal" id="save-modal-image" src="">
                         </div>
-                        <div class="modal-body-right">
-                            <p class="book-title" id="save-modal-book-title">Title</p>
-                            <p class="book-author"id="save-modal-book-author" >Author</p>
-                            <div class="modal-page-count-container">
-                                <i class="fa-sharp fa-solid fa-book-open" style="font-size: 0.8rem;"></i>
-                                <p id="save-modal-book-pagecount">327</p>
+                        <div class="pb-3 position-relative">
+                            <div class="field-label position-absolute"><span>Title</span></div>
+                            <div class="field-text field-small mx-3 mt-2" id="save-modal-book-title">Dune</div>
+                        </div>
+                        <div class="pb-3 position-relative">
+                            <div class="field-label position-absolute"><span>Author</span></div>
+                            <div class="field-text field-small mx-3" id="save-modal-book-author">Frank Herbert</div>
+                        </div>
+                        <div class="pb-3 position-relative">
+                            <div class="field-label position-absolute"><span>Pages</span></div>
+                            <div class="field-text mx-3" id="save-modal-book-pages">706</div>
+                        </div>
+                        <div class="pb-3 position-relative">
+                            <div class="field-label position-absolute"><span>Description</span></div>
+                            <div class="field-text field-large mx-3 overflow-y-auto" id="save-modal-book-description">
+                                Set on the desert planet Arrakis, Dune is the story of the boy Paul Atreides, heir to a noble
+                                family tasked with ruling an inhospitable world where the only thing of value is the “spice”
+                                melange, a drug capable of extending life and enhancing consciousness.
                             </div>
-                            <p class="book-description" id="save-modal-book-description">Description</p>
                         </div>
                     </div>
                     <div class="modal-footer">
